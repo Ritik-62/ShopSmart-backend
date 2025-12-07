@@ -34,11 +34,19 @@ const protect = async (req, res, next) => {
 };
 
 const admin = (req, res, next) => {
-    if (req.user && req.user.role === 'ADMIN') {
+    if (req.user && (req.user.role === 'ADMIN' || req.user.role === 'SUPERADMIN')) {
         next();
     } else {
         res.status(401).json({ message: 'Not authorized as an admin' });
     }
 };
 
-module.exports = { protect, admin };
+const superadmin = (req, res, next) => {
+    if (req.user && req.user.role === 'SUPERADMIN') {
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized as a superadmin' });
+    }
+};
+
+module.exports = { protect, admin, superadmin };
